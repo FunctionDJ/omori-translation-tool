@@ -1,0 +1,96 @@
+html,
+body {
+  height: 100%;
+  width: 100%;
+  padding: .5em;
+  margin: 0;
+  background: #fafafa;
+  font-family: 'Helvetica Neue', arial, sans-serif;
+  font-weight: 400;
+  color: #444;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#app {
+  display: flex;
+}
+
+#app > * {
+  flex: 1;
+}
+
+#app > *:not(:first-child) {
+  margin-left: 1em;
+}
+
+#app > *:not(:first-child) {
+  margin-top: 0.5em;
+}
+
+.literal {
+  font-style: italic;
+}
+
+.dialog {
+  font-size: 2em;
+  padding: 1rem;
+  color: white;
+  background-color: hsl(0, 0%, 20%);
+}
+
+.dialog > *:not(:first-child) {
+  margin-top: .5em;
+}
+
+.dialog::before {
+  font-size: .7em;
+  content: "Dialog";
+  display: block;
+  padding-bottom: 1em;
+}
+
+.message {
+  background: black;
+  padding: .3em;
+}
+
+.face-text-container {
+  display: flex;
+}
+
+.message-element {
+  background-color: #222;
+}
+
+.text {
+  flex: 1;
+  padding: 0 .2em;
+}
+
+.face {
+  width: 106px;
+  min-width: 106px;
+  margin-right: .6rem;
+  height: 106px;
+  display: inline-block;
+}
+
+.raw {
+  font-size: .6em;
+  padding: .2em .4em;
+  margin-top: .6rem;
+  font-family: monospace;
+}
+
+.raw-edit {
+  background-color: transparent;
+  color: white;
+  border: none;
+  resize: vertical;
+  width: 100%;
+}
