@@ -1,54 +1,51 @@
-import { useEffect, useState } from "preact/hooks"
-import { Dialog } from "./dialog"
-import { ActorsData } from "../types"
-import { fetchJson, fetchYML } from "../function"
+import { useEffect, useMemo, useState } from "preact/hooks"
+import { ActorsData, YmlData } from "../types"
+import { fetchJson, useDebounce } from "../function"
+import { Editor } from "./editor"
+import { createContext } from "preact"
+import { Viewer } from "./viewer"
 import useLocalStorage from "react-use-localstorage"
 
+export const Actors = createContext<ActorsData|null>(null)
+
 export function App() {
-  const [current, setCurrent] = useLocalStorage("current", "01_cutscenes_neighbors.yml")
-  
-  const [dialog, setDialog] = useState("")
-
-  const [index, setIndex] = useState<string[]>([])
-
   const [actors, setActors] = useState<ActorsData|null>(null)
 
+  const [jsonStringInit, setJsonString] = useLocalStorage("wip")
+  const jsonString = useMemo(() => jsonStringInit, [])
+  const [editorYml, setEditorYml] = useState<YmlData|null>(null)
+  const debouncedEditorYml = useDebounce(editorYml, 2000)
+
   useEffect(() => {
-    if (!current) {
-      return
+    try {
+      setEditorYml(JSON.parse(jsonString))
+    } catch {
+      setEditorYml(null)
     }
-
-    fetchYML(current).then(setDialog)
-  }, [current])
+  }, [jsonString])
 
   useEffect(() => {
-    fetchJson("yml-index.json").then(setIndex)
+    setJsonString(JSON.stringify(debouncedEditorYml))
+  }, [debouncedEditorYml])
+
+  useEffect(() => {
     fetchJson("www_decrypt/data/Actors.json").then(setActors)
   }, [])
 
-  return ( 
-    <>
+  function clone(yml: YmlData) {
+    const ymlJsonString = JSON.stringify(yml)
+    setJsonString(ymlJsonString)
+    setEditorYml(JSON.parse(ymlJsonString))
+  }
+
+  return (
+    <Actors.Provider value={actors}>
       <div id="viewer">
-        <select
-          value={current ?? ""}
-          onChange={e => setCurrent(e.currentTarget.value)}
-        >
-          {index.map(file => (
-            <option key={file} value={file}>
-              {file.split("/").pop()?.split(".")[0]}
-            </option>
-          ))}
-        </select>
-        <br/>
-        {Boolean(dialog) && actors && (
-          <Dialog text={dialog} actors={actors}/>
-        )}
+        <Viewer clone={clone}/>
       </div>
       <div id="editor">
-        {Boolean(dialog) && actors && (
-          <Dialog text={dialog} actors={actors} edit/>
-        )}
+        <Editor yml={editorYml} setYml={setEditorYml}/>
       </div>
-    </>
+    </Actors.Provider>
   )
 }

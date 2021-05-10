@@ -1,7 +1,7 @@
 @font-face {
   font-family: "OMORI-wiggly";
   src:
-    url("www_decrypt/fonts/OMORI_GAME.ttf")
+    url("/www_decrypt/fonts/OMORI_GAME.ttf")
     format("truetype-variations")
   ;
 }
@@ -9,7 +9,7 @@
 @font-face {
   font-family: "OMORI-normal";
   src:
-    url("www_decrypt/fonts/OMORI_GAME2.ttf")
+    url("/www_decrypt/fonts/OMORI_GAME2.ttf")
     format("truetype-variations")
   ;
 }

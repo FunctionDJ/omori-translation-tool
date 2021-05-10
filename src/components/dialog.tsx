@@ -1,26 +1,28 @@
-import { useMemo, useState } from "preact/hooks"
-import { load } from "js-yaml"
-import { ActorsData, YmlData } from "../types"
+import { StateUpdater } from "preact/hooks"
+import { YmlData } from "../types"
 import { Message } from "./message"
 
 interface Props {
-  text: string
-  actors: ActorsData
+  yml: YmlData
+  setYml?: StateUpdater<YmlData|null>
   edit?: boolean
 }
 
-export const Dialog = ({ text, actors, edit }: Props) => {
-  const ymlMemo = useMemo(() => load(text) as YmlData, [text])
-  const [yml, setYml] = useState(ymlMemo)
-
-  if (!yml) {
-    console.log("erorr: yml", yml)
-    return <p>Error...</p>
-  }
-
+export const Dialog = ({ yml, setYml, edit }: Props) => {
   function handleChange(text: string, messageKey: string) {
+    if (!setYml) {
+      return
+    }
+
     setYml(oldYml => {
+      if (!oldYml) {
+        return {
+          [messageKey]: { text }
+        }
+      }
+
       oldYml[messageKey].text = text
+
       return {...oldYml}
     })
   }
@@ -30,10 +32,9 @@ export const Dialog = ({ text, actors, edit }: Props) => {
       {Object.entries(yml).map(([key, message]) => (
         <Message
           key={key} message={message}
-          actors={actors}
-          onChange={
+          setMessage={
             edit ? (
-              (event: JSX.TargetedEvent<HTMLTextAreaElement, Event>) => handleChange(event.currentTarget.value, key)
+              text => handleChange(text, key)
             ) : (
               undefined
             )

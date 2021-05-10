@@ -16,12 +16,18 @@ body {
   box-sizing: border-box;
 }
 
+body {
+  display: flex;
+}
+
 #app {
   display: flex;
+  flex: 1;
 }
 
 #app > * {
   flex: 1;
+  width: 50%;
 }
 
 #app > *:not(:first-child) {
@@ -36,7 +42,15 @@ body {
   font-style: italic;
 }
 
+#viewer, #editor {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 .dialog {
+  flex: 1;
+  overflow-y: scroll;
   font-size: 2em;
   padding: 1rem;
   color: white;
@@ -70,6 +84,7 @@ body {
 .text {
   flex: 1;
   padding: 0 .2em;
+  overflow-x: auto;
 }
 
 .face {

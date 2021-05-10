@@ -28,5 +28,5 @@
     "react/no-unknown-property": ["error", { "ignore": ["class"] }],
     "@typescript-eslint/explicit-module-boundary-types": "off"
   },
-  "ignorePatterns": "src/scripts/*.js"
+  "ignorePatterns": ["src/scripts/*.js", "src/functions/*.js"]
 }

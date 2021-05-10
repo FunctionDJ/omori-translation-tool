@@ -2,25 +2,31 @@ import { ActorsData, MessageData } from "../types"
 import parseText from "../parse"
 import { Face } from "./face"
 import { Raw } from "./raw"
-
-interface Props {
-  message: MessageData
-  actors: ActorsData
-  onChange: (
-    (event: JSX.TargetedEvent<HTMLTextAreaElement, Event>) => void
-  ) | undefined
-}
+import { useContext, useEffect, useMemo, useState } from "preact/hooks"
+import { Actors } from "./app"
+import { useDebounce } from "../function"
 
 interface Config {
   color: string
   shake: boolean
 }
 
+const getActor = (actors: ActorsData|null, param: string) => {
+  if (!actors) {
+    return {
+      id: 0,
+      name: "Loading..."
+    }
+  }
+
+  return actors?.find(a => a?.id === parseInt(param))
+}
+
 const routeOperator = (
   obj: any,
   i: number,
   config: Config,
-  actors: ActorsData,
+  actors: ActorsData|null,
   getClasses: () => string
 ) => {
   switch (obj.operator) {
@@ -29,7 +35,7 @@ const routeOperator = (
       break
     }
     case "n": {
-      const actor = actors.find(a => a?.id === parseInt(obj.params))
+      const actor = getActor(actors, obj.params)
 
       return (
         <span
@@ -53,7 +59,7 @@ const routeObj = (
   obj: any,
   i: number,
   config: Config,
-  actors: ActorsData,
+  actors: ActorsData|null,
   getClasses: () => string
 ) => {
   switch (obj.type) {
@@ -86,13 +92,34 @@ const routeObj = (
   }
 }
 
-export const Message = ({ message, actors, onChange }: Props) => {
+interface Props {
+  message: MessageData
+  setMessage?: (text: string) => void
+}
+
+export const Message = ({ message, setMessage }: Props) => {
   const parsed = parseText(message.text || "") as any[]
+
+  const actors = useContext(Actors)
 
   const config: Config = {
     color: "c0",
     shake: false
   }
+
+  const initText = useMemo(() => message.text, [])
+
+  const [localText, setLocalText] = useState(initText)
+
+  const debouncedText = useDebounce(localText, 50)
+
+  useEffect(() => {
+    if (!setMessage) {
+      return
+    }
+
+    setMessage(debouncedText)
+  }, [debouncedText])
 
   function getClasses() {
     return [
@@ -115,14 +142,14 @@ export const Message = ({ message, actors, onChange }: Props) => {
           {parsed.map((obj, i) => routeObj(obj, i, config, actors, getClasses))}
         </div>
       </div>
-      {onChange ? (
+      {setMessage ? (
         <textarea
           className="raw raw-edit"
-          value={message.text}
-          onChange={event => onChange(event)}
+          value={localText}
+          onChange={event => setLocalText(event.currentTarget.value)}
         />
       ) : (
-        <Raw>{message.text}</Raw>
+        <Raw text={message.text}/>
       )}
     </div>
   )
