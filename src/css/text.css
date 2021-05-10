@@ -1,7 +1,12 @@
+/**
+ * Credits to https://github.com/goaaats/OmoriDialogue
+ * for most of these styles
+ */
+
 @font-face {
   font-family: "OMORI-wiggly";
   src:
-    url("/www_decrypt/fonts/OMORI_GAME.ttf")
+    url("/fonts-with-special-characters/OMORI_GAME.ttf")
     format("truetype-variations")
   ;
 }
@@ -9,16 +14,16 @@
 @font-face {
   font-family: "OMORI-normal";
   src:
-    url("/www_decrypt/fonts/OMORI_GAME2.ttf")
+    url("/fonts-with-special-characters/OMORI_GAME2.ttf")
     format("truetype-variations")
   ;
 }
 
-span.fOMORI_GAME {
+span.OMORI_GAME2 {
   font-family: "OMORI-normal", Monospace;
 }
 
-span.fOMORI_GAME2 {
+span.OMORI_GAME {
   font-family: "OMORI-wiggly", Monospace;
 }
 

@@ -9,6 +9,7 @@ import { useDebounce } from "../function"
 interface Config {
   color: string
   shake: boolean
+  font: string
 }
 
 const getActor = (actors: ActorsData|null, param: string) => {
@@ -47,6 +48,20 @@ const routeOperator = (
       )
     }
     case "com": return // ignore
+    case "fn": {
+      switch (obj.params) {
+        case "OMORI_GAME2": {
+          config.font = "OMORI_GAME2"
+          break
+        }
+        case "OMORI_GAME": {
+          config.font = "OMORI_GAME"
+          break
+        }
+        default: console.log(obj)
+      }
+      break
+    }
     case "sinv": {
       config.shake = obj.params !== "0"
       break
@@ -70,6 +85,9 @@ const routeObj = (
     )
     case "br": return <br key={i}/>
     case "numeric": {
+      return routeOperator(obj, i, config, actors, getClasses)
+    }
+    case "string": {
       return routeOperator(obj, i, config, actors, getClasses)
     }
     case "literal": return (
@@ -104,7 +122,8 @@ export const Message = ({ message, setMessage }: Props) => {
 
   const config: Config = {
     color: "c0",
-    shake: false
+    shake: false,
+    font: "OMORI_GAME2"
   }
 
   const initText = useMemo(() => message.text, [])
@@ -125,7 +144,7 @@ export const Message = ({ message, setMessage }: Props) => {
     return [
       config.color,
       config.shake ? "sinv" : "",
-      "fOMORI_GAME"
+      config.font
     ].join(" ")
   }
 
