@@ -1,0 +1,99 @@
+/**
+ * Credits to https://github.com/goaaats/OmoriDialogue
+ * for most of these styles
+ */
+
+@import "csshake/scss/_tools";
+
+@font-face {
+  font-family: "OMORI-wiggly";
+  src:
+    url("/fonts-with-special-characters/OMORI_GAME.ttf")
+    format("truetype-variations")
+  ;
+}
+
+@font-face {
+  font-family: "OMORI-normal";
+  src:
+    url("/fonts-with-special-characters/OMORI_GAME2.ttf")
+    format("truetype-variations")
+  ;
+}
+
+$colors: (
+  #ffffff, #6095FF, #D26656, #5BD864,
+  #FFD966, #F3B542, #000000, #808080,
+  #223F5C, #D26656, #223F5C, #63F7EE,
+  #223F5C, #C263E2, #000000
+);
+
+$font-sizes: (
+  2: 15px, 3: 17px, 5: 28px, 6: 31px
+);
+
+@keyframes wave {
+  from {
+      transform: translateY(0);
+  }
+
+  to {
+      transform: translateY(-6px);
+  }
+}
+
+span {
+  &.OMORI_GAME2 {
+    font-family: "OMORI-normal", Monospace;
+  }
+  
+  &.OMORI_GAME {
+    font-family: "OMORI-wiggly", Monospace;
+  }
+  
+  @each $name, $size in $font-sizes {
+    &.s#{$name} {
+      font-size: $size;
+    }
+  }
+
+  @for $i from 0 to length($colors) {
+    &.c#{$i} {
+      color: nth($colors, $i + 1);
+    }
+  }
+
+  &.sinv {
+    display: inline-block;
+    animation-direction: alternate;
+    animation-duration: 0.3s;
+    animation-iteration-count: infinite;
+    animation-name: wave;
+  }
+
+  &.quake1 > * {
+    display: inline-block;
+
+    @include do-shake(
+      $name: 'my-custom-shake',
+      $h: 3px,
+      $v: 5px,
+      $r: 1deg,
+      $dur: 700ms,
+      $precision: 1 / 20,
+      $opacity: false,
+      $q: infinite,
+      $t: ease-in-out,
+      $delay: null,
+      $chunk: 100%
+    );
+
+    // randomise timing
+    @for $i from 1 through 100 {
+      &:nth-child(10n + #{$i}) {
+        animation-delay: 0s + random();
+      }
+    }
+  }
+}
+

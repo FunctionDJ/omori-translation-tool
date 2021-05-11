@@ -10,6 +10,7 @@ interface Config {
   color: string
   shake: boolean
   font: string
+  quake: number
 }
 
 const getActor = (actors: ActorsData|null, param: string) => {
@@ -62,6 +63,10 @@ const routeOperator = (
       }
       break
     }
+    case "quake": {
+      config.quake = obj.params
+      break
+    }
     case "sinv": {
       config.shake = obj.params !== "0"
       break
@@ -78,11 +83,19 @@ const routeObj = (
   getClasses: () => string
 ) => {
   switch (obj.type) {
-    case "text": return (
-      <span key={i} className={getClasses()}>
-        {obj.text}
-      </span>
-    )
+    case "text": {
+      const isQuake = config.quake !== 0
+
+      return (
+        <span key={i} className={getClasses()}>
+          {isQuake ? (
+            obj.text.split("").map((letter: string, j: number) => (
+              <span key={j} className="shake-constant my-custom-shake">{letter}</span>
+            ))
+          ) : obj.text}
+        </span>
+      )
+    }
     case "br": return <br key={i}/>
     case "numeric": {
       return routeOperator(obj, i, config, actors, getClasses)
@@ -123,7 +136,8 @@ export const Message = ({ message, setMessage }: Props) => {
   const config: Config = {
     color: "c0",
     shake: false,
-    font: "OMORI_GAME2"
+    font: "OMORI_GAME2",
+    quake: 0
   }
 
   const initText = useMemo(() => message.text, [])
@@ -144,7 +158,8 @@ export const Message = ({ message, setMessage }: Props) => {
     return [
       config.color,
       config.shake ? "sinv" : "",
-      config.font
+      config.font,
+      "quake" + config.quake
     ].join(" ")
   }
 
