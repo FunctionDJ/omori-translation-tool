@@ -63,12 +63,22 @@ span {
     }
   }
 
-  &.sinv {
+  &.sinv > * {
+
+    // can be overwritten if the content is blank for whitespace fix
     display: inline-block;
+
     animation-direction: alternate;
     animation-duration: 0.3s;
     animation-iteration-count: infinite;
     animation-name: wave;
+
+    // randomise timing
+    @for $i from 1 through 100 {
+      &:nth-child(10n + #{$i}) {
+        animation-delay: 0s + ($i / 30);
+      }
+    }
   }
 
   &.quake1 > * {

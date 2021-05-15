@@ -8,20 +8,22 @@ interface Props {
   isDragActive: boolean
 }
 
-export const DropzoneVisual = ({
+export const MyDropzone = ({
   rootProps, inputProps, isDragActive
 }: Props) => (
-  <div style={{
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100%"
-  }} {...rootProps}>
+  <div
+    className={`
+      d-flex pointer justify-content-center
+      align-items-center h-100 dropzone
+      ${isDragActive ? "drag" : ""}
+    `}
+    {...rootProps}
+  >
     <input {...inputProps}/>
-    <p style={{
-      cursor: "pointer",
-      textAlign: "center"
-    }}>
+    <p
+      href="#"
+      className="text-center text-light fs-4 fw-bold"
+    >
       {isDragActive ? (
         <strong>Drop it!</strong>
       ) : (

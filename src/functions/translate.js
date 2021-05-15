@@ -3,6 +3,8 @@ const FormData = require("form-data")
 
 const endpoint = "https://api-free.deepl.com/v2/translate"
 
+const languagesWithFormalitySupport = ["DE", "FR", "IT", "ES", "NL", "PL", "PT-PT", "PT-BR", "RU"]
+
 const getForm = jsonBody => {
   const form = new FormData()
   
@@ -11,7 +13,10 @@ const getForm = jsonBody => {
   form.append("target_lang", jsonBody.target_lang)
   form.append("source_lang", "EN")
   form.append("preserve_formatting", "1")
-  form.append("formality", "less")
+
+  if (languagesWithFormalitySupport.includes(jsonBody.target_lang)) {
+    form.append("formality", "less")
+  }
 
   return form
 }
@@ -23,10 +28,17 @@ exports.handler = async event => {
     headers: form.getHeaders()
   }
 
-  const response = await axios.post(endpoint, form, config)
-
-  return {
-    statusCode: response.status,
-    body: JSON.stringify(response.data)
+  try {
+    const response = await axios.post(endpoint, form, config)
+  
+    return {
+      statusCode: response.status,
+      body: JSON.stringify(response.data)
+    }
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify(error.response.data)
+    }
   }
 }

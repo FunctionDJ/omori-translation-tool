@@ -1,0 +1,61 @@
+// .form-control {
+//   background-color: hsl(0, 0%, 20%);
+//   // background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/></svg>");
+//   color: white;
+// }
+
+.modal-content {
+  color:hsla(0, 0%, 90%);
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.dropzone {
+  border: .3em dashed hsla(0, 0%, 100%, 0.1);
+  border-radius: .7em;
+  color: #fff;
+  transition: border-color .2s ease;
+
+  &.drag {
+    border-color: hsla(0, 0%, 100%, 0.7);
+  }
+}
+
+.message-element {
+  background-color: #222;
+}
+
+.raw {
+  @extend .message-element;
+
+  font-size: .6em;
+  padding: .2em .4em;
+  margin-top: .6rem;
+  font-family: "Fira Code";
+  
+  &.edit {
+    color: white;
+    border: none;
+    resize: vertical;
+    width: 100%;
+  }
+}
+
+.text {
+  flex: 1;
+  padding: 0 .2em;
+  padding-bottom: .2em;
+  overflow-x: auto;
+  overflow-y: hidden;
+  line-height: 1em;
+}
+
+.face {
+  width: 106px;
+  min-width: 106px;
+  margin-right: .6rem;
+  height: 106px;
+  display: inline-block;
+}

@@ -1,9 +1,10 @@
 import { StateUpdater, useEffect, useRef, useState } from "preact/hooks"
 import { Dialog } from "./dialog"
 import { useDropzone } from "react-dropzone"
-import { DropzoneVisual } from "./dropzone-visual"
+import { MyDropzone } from "./dropzone-visual"
 import { YmlData } from "../types"
 import { dump, load } from "js-yaml"
+import { FA } from "./fontawesome"
 
 interface Props {
   yml: YmlData|null
@@ -52,9 +53,20 @@ export const Editor = ({ yml, setYml }: Props) => {
 
   return yml ? (
     <>
-      <div>
-        <button onClick={download} disabled={!yml}>Download</button>
-        <button onClick={clear}>Clear</button>
+      <div className="mb-3 w-100">
+        <button
+          className="btn btn-primary"
+          onClick={download}
+          disabled={!yml}
+        >
+          <FA i="download"/> Download YML
+        </button>
+        <button
+          className="btn btn-danger float-right"
+          onClick={clear}
+        >
+          <FA i="trash"/> Clear
+        </button>
         {downloadURL && (
           <a
             ref={downloadRef}
@@ -67,7 +79,7 @@ export const Editor = ({ yml, setYml }: Props) => {
       <Dialog yml={yml} setYml={setYml} edit/>
     </>
   ) : (
-    <DropzoneVisual
+    <MyDropzone
       rootProps={getRootProps()}
       inputProps={getInputProps()}
       isDragActive={isDragActive}

@@ -1,2 +1,5 @@
+[build]
+  publish = "dist"
+
 [functions]
   directory = "src/functions"

@@ -39,13 +39,15 @@ export function App() {
   }
 
   return (
-    <Actors.Provider value={actors}>
-      <div id="viewer">
-        <Viewer clone={clone}/>
-      </div>
-      <div id="editor">
-        <Editor yml={editorYml} setYml={setEditorYml}/>
-      </div>
-    </Actors.Provider>
+    <div className="container-fluid d-flex my-3">
+      <Actors.Provider value={actors}>
+        <div id="viewer">
+          <Viewer clone={clone}/>
+        </div>
+        <div id="editor" className="ml-3">
+          <Editor yml={editorYml} setYml={setEditorYml}/>
+        </div>
+      </Actors.Provider>
+    </div>
   )
 }

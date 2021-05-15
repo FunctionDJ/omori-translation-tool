@@ -5,6 +5,7 @@ import { Raw } from "./raw"
 import { useContext, useEffect, useMemo, useState } from "preact/hooks"
 import { Actors } from "./app"
 import { useDebounce } from "../function"
+import { Translation } from "./Translation"
 
 interface Config {
   color: string
@@ -84,6 +85,16 @@ const routeObj = (
 ) => {
   switch (obj.type) {
     case "text": {
+      if (config.shake) {
+        return (
+          <span key={i} className={getClasses()}>
+            {obj.text.split("").map((letter: string, j: number) => (
+              <span key={j} className={letter.trim() === "" ? "d-inline" : ""}>{letter}</span>
+            ))}
+          </span>
+        )
+      }
+
       const isQuake = config.quake !== 0
 
       return (
@@ -173,12 +184,13 @@ export const Message = ({ message, setMessage }: Props) => {
           />
         )}
         <div className="text message-element">
+          {!setMessage && <Translation/>}
           {parsed.map((obj, i) => routeObj(obj, i, config, actors, getClasses))}
         </div>
       </div>
       {setMessage ? (
         <textarea
-          className="raw raw-edit"
+          className="raw edit"
           value={localText}
           onChange={event => setLocalText(event.currentTarget.value)}
         />
